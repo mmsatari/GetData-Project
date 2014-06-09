@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>Bioinformatics for Big Omics Data: Advanced data manipulation</title>
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 12px;
+   margin: 8px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 { 
+   font-size:2.2em; 
+}
+
+h2 { 
+   font-size:1.8em; 
+}
+
+h3 { 
+   font-size:1.4em; 
+}
+
+h4 { 
+   font-size:1.0em; 
+}
+
+h5 { 
+   font-size:0.9em; 
+}
+
+h6 { 
+   font-size:0.8em; 
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre {	
+   margin-top: 0;
+   max-width: 95%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code.r, code.cpp {
+   background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * { 
+      background: transparent !important; 
+      color: black !important; 
+      filter:none !important; 
+      -ms-filter: none !important; 
+   }
+
+   body { 
+      font-size:12pt; 
+      max-width:100%; 
+   }
+       
+   a, a:visited { 
+      text-decoration: underline; 
+   }
+
+   hr { 
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote { 
+      padding-right: 1em; 
+      page-break-inside: avoid; 
+   }
+
+   tr, img { 
+      page-break-inside: avoid; 
+   }
+
+   img { 
+      max-width: 100% !important; 
+   }
+
+   @page :left { 
+      margin: 15mm 20mm 15mm 10mm; 
+   }
+     
+   @page :right { 
+      margin: 15mm 10mm 15mm 20mm; 
+   }
+
+   p, h2, h3 { 
+      orphans: 3; widows: 3; 
+   }
+
+   h2, h3 { 
+      page-break-after: avoid; 
+   }
+}
+
+</style>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: rgb(88, 72, 246)
+   }
+
+   pre .number {
+     color: rgb(0, 0, 205);
+   }
+
+   pre .comment {
+     color: rgb(76, 136, 107);
+   }
+
+   pre .keyword {
+     color: rgb(0, 0, 255);
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: rgb(3, 106, 7);
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+
+</head>
+
+<body>
+<h1>Bioinformatics for Big Omics Data: Advanced data manipulation</h1>
+
+<p>width: 1440
+height: 900
+transition: none
+font-family: &#39;Helvetica&#39;
+css: my_style.css
+author: Raphael Gottardo, PhD
+date: <code>r format(Sys.Date(), format=&quot;%B %d, %Y&quot;)</code></p>
+
+<p><a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" /></a><br /><tiny>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/deed.en_US">Creative Commons Attribution-ShareAlike 3.0 Unported License</tiny></a>.</p>
+
+<h1>Here is a simple change</h1>
+
+<h1>Motivation</h1>
+
+<p>Let&#39;s first turn on the cache for increased performance.</p>
+
+<pre><code class="r, cache=FALSE">library(knitr)
+# Set some global knitr options
+opts_chunk$set(cache=TRUE)
+</code></pre>
+
+<ul>
+<li><p>R has pass-by-value semantics, which minimizes accidental side effects. However, this can become a major bottleneck when dealing with large datasets both in terms of memory and speed.</p></li>
+<li><p>Working with <code>data.frame</code>s in R can also be painful process in terms of writing code.</p></li>
+<li><p>Fortunately, R provides some solution to this problems.</p></li>
+</ul>
+
+<hr/>
+
+<pre><code class="r">a &lt;- rnorm(10^5)
+gc()
+b &lt;- a
+gc()
+a[1] &lt;- 0
+gc()
+</code></pre>
+
+<h1>Overview</h1>
+
+<p>Here we will review three R packages that can be used to provide efficient data manipulation:</p>
+
+<ul>
+<li><code>data.table</code>: An package for efficient data storage and manipulation</li>
+<li><code>RSQLite</code>: Database Interface R driver for SQLite</li>
+<li><code>sqldf</code>: An R package for runing SQL statements on R data frames, optimized for convenience</li>
+</ul>
+
+<p><small>Thank to Kevin Ushey (@kevin_ushey) for the <code>data.table</code> notes and Matt Dowle and Arunkumar Srinivasan for helpful comments.</small></p>
+
+<h1>What is data.table?</h1>
+
+<p><code>data.table</code> is an R package that extends. <code>R</code> <code>data.frame</code>s.</p>
+
+<p>Under the hood, they are just data.frame&#39;s, with some extra &#39;stuff&#39; added on.
+So, they&#39;re collections of equal-length vectors. Each vector can be of
+different type.</p>
+
+<pre><code class="r">library(data.table)
+dt &lt;- data.table(x=1:3, y=c(4, 5, 6), z=letters[1:3])
+dt
+class(dt)
+</code></pre>
+
+<p>The extra functionality offered by <code>data.table</code> allows us to modify, reshape, 
+and merge <code>data.table</code>s much quicker than <code>data.frame</code>s. <strong>See that <code>data.table</code> inherits from <code>data.frame</code>!</strong></p>
+
+<p><strong>Note:</strong> The <a href="https://r-forge.r-project.org/scm/viewvc.php/pkg/NEWS?view=markup&amp;root=datatable">development version (v1.8.11)</a> of data.table includes a lot of new features including <code>melt</code> and <code>dcast</code> methods</p>
+
+<h1>Installing data.table</h1>
+
+<ul>
+<li>stable CRAN release</li>
+</ul>
+
+<pre><code class="r eval=FALSE">install.packages(&quot;data.table&quot;)
+</code></pre>
+
+<ul>
+<li>latest bug-fixes + enhancements
+<code>{r eval=FALSE}
+install.packages(&quot;data.table&quot;, repos=&quot;http://R-forge.R-project.org&quot;)
+</code></li>
+</ul>
+
+<h1>What&#39;s different?</h1>
+
+<p>Most of your interactions with <code>data.table</code>s will be through the subset (<code>[</code>)
+operator, which behaves quite differently for <code>data.table</code>s. We&#39;ll examine
+a few of the common cases.</p>
+
+<p>Visit <a href="http://stackoverflow.com/questions/13618488/what-you-can-do-with-data-frame-that-you-cant-in-data-table">this stackoverflow question</a> for a summary of the differences between <code>data.frame</code>s and <code>data.table</code>s.</p>
+
+<h1>Single element subsetting</h1>
+
+<pre><code class="r">library(data.table)
+DF &lt;- data.frame(x=1:3, y=4:6, z=7:9)
+DT &lt;- data.table(x=1:3, y=4:6, z=7:9)
+DF[c(2,3)]
+DT[c(2,3)]
+</code></pre>
+
+<p>By default, single-element subsetting in <code>data.table</code>s refers to rows, rather
+than columns.</p>
+
+<h1>Row subsetting</h1>
+
+<pre><code class="r">library(data.table)
+DF &lt;- data.frame(x=1:3, y=4:6, z=7:9)
+DT &lt;- data.table(x=1:3, y=4:6, z=7:9)
+DF[c(2,3), ]
+DT[c(2,3), ]
+</code></pre>
+
+<p>Notice: row names are lost with <code>data.table</code>s. Otherwise, output is identical.</p>
+
+<h1>Column subsetting</h1>
+
+<pre><code class="r">library(data.table)
+DF &lt;- data.frame(x=1:3, y=4:6, z=7:9)
+DT &lt;- data.table(x=1:3, y=4:6, z=7:9)
+DF[, c(2,3)]
+DT[, c(2,3)]
+</code></pre>
+
+<p><code>DT[, c(2,3)]</code> just returns <code>c(2, 3)</code>. Why on earth is that?</p>
+
+<h1>The j expression</h1>
+
+<p>The subset operator is really a function, and <code>data.table</code> modifies it to behave
+differently.</p>
+
+<p>Call the arguments we pass e.g. <code>DT[i, j]</code>, or <code>DT[i]</code>.</p>
+
+<p>The second argument to <code>[</code> is called the <code>j expression</code>, so-called because it&#39;s
+interpreted as an <code>R</code> expression. This is where most of the <code>data.table</code>
+magic happens.</p>
+
+<p><code>j</code> is an expression evaluated within the frame of the <code>data.table</code>, so
+it sees the column names of <code>DT</code>. Similarly for <code>i</code>.</p>
+
+<p>First, let&#39;s remind ourselves what an <code>R</code> expression is.</p>
+
+<h1>Expressions</h1>
+
+<p>An <code>expression</code> is a collection of statements, enclosed in a block generated by
+braces <code>{}</code>.</p>
+
+<pre><code class="r">## an expression with two statements
+{
+  x &lt;- 1
+  y &lt;- 2
+}
+## the last statement in an expression is returned
+k &lt;- { print(10); 5 }
+print(k)
+</code></pre>
+
+<h1>The j expression (suite)</h1>
+
+<p>So, <code>data.table</code> does something special with the <code>expression</code> that you pass as
+<code>j</code>, the second argument, to the subsetting (<code>[</code>) operator.</p>
+
+<p>The return type of the final statement in our expression determines the type
+of operation that will be performed.</p>
+
+<p>In general, the output should either be a <code>list</code> of symbols, or a statement
+using <code>:=</code>.</p>
+
+<p>We&#39;ll start by looking at the <code>list</code> of symbols as an output.</p>
+
+<h1>An example</h1>
+
+<p>When we simply provide a <code>list</code> to the <code>j expression</code>, we generate a new
+<code>data.table</code> as output, with operations as performed within the <code>list</code> call.</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=1:5)
+DT[, list(mean_x = mean(x), sum_y = sum(y), sumsq=sum(x^2+y^2))]
+</code></pre>
+
+<p>Notice how the symbols <code>x</code> and <code>y</code> are looked up within the <code>data.table</code> <code>DT</code>.
+No more writing <code>DT$</code> everywhere!</p>
+
+<h1>Using :=</h1>
+
+<p>Using the <code>:=</code> operator tells us we should assign columns by reference into
+the <code>data.table</code> <code>DT</code>:</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5)
+DT[, y := x^2]
+print(DT)
+</code></pre>
+
+<h1>Using := (suite)</h1>
+
+<p>By default, <code>data.table</code>s are not copied on a direct assignment <code>&lt;-</code>:</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1)
+DT2 &lt;- DT
+DT[, y := 2]
+DT2
+</code></pre>
+
+<p>Notice that <code>DT2</code> has changed. This is something to be mindful of; if you want
+to explicitly copy a <code>data.table</code> do so with <code>DT2 &lt;- copy(DT)</code>.</p>
+
+<h1>A slightly more complicated example</h1>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=6:10, z=11:15)
+DT[, m := log2( (x+1) / (y+1) )]
+print(DT)
+</code></pre>
+
+<h1>Using an expression in j</h1>
+
+<p>Note that the right-hand side of a <code>:=</code> call can be an expression.</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=6:10, z=11:15)
+DT[, m := { tmp &lt;- (x + 1) / (y + 1); log2(tmp) }]
+print(DT)
+</code></pre>
+
+<h1>Multiple returns from an expression in j</h1>
+
+<p>The left hand side of a <code>:=</code> call can also be a character vector of names,
+for which the corresponding final statement in the <code>j expression</code> should be
+a list of the same length.</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=6:10, z=11:15)
+DT[, c(&#39;m&#39;, &#39;n&#39;) := { tmp &lt;- (x + 1) / (y + 1); list( log2(tmp), log10(tmp) ) }]
+DT[, `:=`(a=x^2, b=y^2)]
+DT[, c(&quot;c&quot;,&quot;d&quot;):=list(x^2, y^2)]
+</code></pre>
+
+<h1>The j expression revisited </h1>
+
+<p>So, we typically call <code>j</code> the <code>j expression</code>, but really, it&#39;s either:</p>
+
+<ol>
+<li><p>An expression, or</p></li>
+<li><p>A call to the function <code>:=</code>, for which the first argument is a set of
+names (vectors to update), and the second argument is an expression, with
+the final statement typically being a list of results to assign within
+the <code>data.table</code>.</p></li>
+</ol>
+
+<p>As I said before, <code>a := b</code> is parsed by <code>R</code> as <code>&quot;:=&quot;(a, b)</code>, hence it
+looking somewhat like an operator.</p>
+
+<pre><code class="r">quote(a := b)
+</code></pre>
+
+<h1>Why does it matter?</h1>
+
+<p>Whenever you sub-assign a <code>data.frame</code>, <code>R</code> is forced to copy the entire
+<code>data.frame</code>.</p>
+
+<p>That is, whenever you write <code>DF$x &lt;- 1</code>, <code>DF[&quot;x&quot;] &lt;- 1</code>, <code>DF[[&quot;x&quot;]] &lt;- 1</code>&hellip;</p>
+
+<p>&hellip; R will make a copy of <code>DF</code> before assignment.</p>
+
+<p>This is done in order to ensure any other symbols pointing at the same object
+do not get modified. This is a good thing for when we need to reason about
+the code we write, since, in general, we expect <code>R</code> to operate without side 
+effects.</p>
+
+<p>Unfortunately, it is prohibitively slow for large objects, and hence why
+<code>:=</code> can be very useful.</p>
+
+<h1>Why does it matter?</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+big_df &lt;- data.frame(x=rnorm(1E6), y=sample(letters, 1E6, TRUE))
+big_dt &lt;- data.table(big_df)
+microbenchmark( big_df$z &lt;- 1, big_dt[, z := 1] )
+</code></pre>
+
+<p>Once again, notice that <code>:=</code> is actually a function, and <code>z := 1</code> 
+is parsed as <code>&quot;:=&quot;(z, 1)</code>.</p>
+
+<h1>Using by</h1>
+
+<p>We can also perform grouping like operations through the use of the
+<code>by</code> argument:</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=6:10, gp=c(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;b&#39;))
+DT[, z := mean(x+y), by=gp]
+print(DT)
+</code></pre>
+
+<p>Notice that since <code>mean(x+y)</code> returns a scalar (numeric vector of length 1),
+it is recycled to fill within each group.</p>
+
+<h1>Generating a new data.table</h1>
+
+<p>What if, rather than modifying the current <code>data.table</code>, we wanted to generate
+a new one?</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=1:5, y=6:10, gp=c(&#39;a&#39;, &#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;b&#39;))
+DT[, list(z=mean(x + y)), by=gp]
+</code></pre>
+
+<p>Notice that we retain one row for each unique group specified in the <code>by</code>
+argument, and only the <code>by</code> variables along-side our <code>z</code> variable are returned.</p>
+
+<h1>The j expression</h1>
+
+<ul>
+<li>A <code>list</code></li>
+</ul>
+
+<p>&hellip; returns a new <code>data.table</code>, potentially subset over groups in your <code>by</code>.</p>
+
+<ul>
+<li>A <code>:=</code> Call</li>
+</ul>
+
+<p>&hellip; modifies that <code>data.table</code> in place, hence saving memory. Output is
+recycled if the <code>by</code> argument is used.</p>
+
+<h4>In general, our <code>j expression</code> is either:</h4>
+
+<ol>
+<li><p>an expression, with the final (or only) statement being a <code>list</code> of (named) 
+arguments,</p></li>
+<li><p>a call to the <code>:=</code> function, with</p>
+
+<ul>
+<li>the first argument being names, and</li>
+<li>the second argument being an expression, for which the last statement is
+a list of the same length as the first argument.</li>
+</ul></li>
+</ol>
+
+<h1>Special variables</h1>
+
+<p>There are a number of special variables defined only within <code>j</code>, that allow us to
+do some neat things&hellip;</p>
+
+<pre><code class="r">library(data.table)
+data.table()[, ls(all=TRUE)]
+</code></pre>
+
+<p>These variables allow us to infer a bit more about what&#39;s going on within the
+<code>data.table</code> calls, and also allow us to write more complicated <code>j expression</code>s.</p>
+
+<h1>Special variables</h1>
+
+<h2><code>.SD</code></h2>
+
+<p>A <code>data.table</code> containing the subset of data for each group, excluding
+columns used in <code>by</code>.</p>
+
+<h2><code>.BY</code></h2>
+
+<p>A <code>list</code> containing a length 1 vector for each item in <code>by</code>.</p>
+
+<h2><code>.N</code></h2>
+
+<p>An integer, length 1, containing the number of rows in <code>.SD</code>.</p>
+
+<h2><code>.I</code></h2>
+
+<p>A vector of indices, holding the row locations from which <code>.SD</code> was
+pulled from the parent <code>DT</code>.</p>
+
+<h2><code>.GRP</code></h2>
+
+<p>A counter telling you which group you&#39;re working with (1st, 2nd, 3rd&hellip;)</p>
+
+<h1>Example usage of .N - Counts</h1>
+
+<p>Compute the counts, by group, using <code>data.table</code>&hellip;</p>
+
+<pre><code class="r">set.seed(123); library(data.table); library(microbenchmark)
+DT &lt;- data.table(x=sample(letters[1:3], 1E5, TRUE))
+DT[, .N, by=x]
+table(DT$x)
+</code></pre>
+
+<h1>Example usage of .N - Counts</h1>
+
+<pre><code class="r">library(data.table)
+library(microbenchmark)
+DT &lt;- data.table(x=factor(sample(letters[1:3], 1E5, TRUE)))
+microbenchmark( tbl=table(DT$x), DT=DT[, .N, by=x] )
+</code></pre>
+
+<h1>Example usage of .SD - lapply-type calls</h1>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=rnorm(10), y=rnorm(10), z=rnorm(10), id=letters[1:10])
+DT[, lapply(.SD, mean), .SDcols=c(&#39;x&#39;, &#39;y&#39;, &#39;z&#39;)]
+lapply(DT[,1:3, with=FALSE], mean)
+</code></pre>
+
+<h1>Example usage of .SD - lapply-type calls</h1>
+
+<pre><code class="r, cache=TRUE">library(data.table); library(microbenchmark)
+DT &lt;- data.table(x=rnorm(1E5), y=rnorm(1E5), z=sample(letters,1E5,replace=TRUE))
+DT2 &lt;- copy(DT)
+setkey(DT2, &quot;z&quot;)
+microbenchmark(
+  DT=DT[, lapply(.SD, mean), .SDcols=c(&#39;x&#39;, &#39;y&#39;), by=&#39;z&#39;],
+  DT2=DT2[, lapply(.SD, mean), .SDcols=c(&#39;x&#39;, &#39;y&#39;), by=&#39;z&#39;]
+)
+</code></pre>
+
+<p>setting a key can lead to faster grouping operations. </p>
+
+<h1>Keys</h1>
+
+<p><code>data.table</code>s can be keyed, allowing for faster indexing and subsetting. Keys
+are also used for <code>join</code>s, as we&#39;ll see later.</p>
+
+<pre><code class="r">library(data.table)
+DT &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;a&#39;), y=rnorm(5))
+setkey(DT, x)
+DT[&#39;a&#39;] ## grabs rows corresponding to &#39;a&#39;
+</code></pre>
+
+<p>Note that this does a <code>binary search</code> rather than a <code>vector scan</code>, which is
+much faster!</p>
+
+<h1>Key performance</h1>
+
+<pre><code class="r, cache=TRUE">library(data.table); library(microbenchmark)
+DF &lt;- data.frame(key=sample(letters, 1E6, TRUE), x=rnorm(1E6))
+DT &lt;- data.table(DF)
+setkey(DT, key)
+identical( DT[&#39;a&#39;]$x, DF[ DF$key == &#39;a&#39;, ]$x )
+microbenchmark( DT=DT[&#39;a&#39;], DF=DF[ DF$key == &#39;a&#39;, ], times=5 )
+</code></pre>
+
+<p>Further reading: you can set multiple keys with <code>setkeyv</code> as well.</p>
+
+<h1>Joins</h1>
+
+<p><code>data.table</code> comes with many kinds of joins, implements through the 
+<code>merge.data.table</code> function, and also through the <code>[</code> syntax as well. We&#39;ll
+focus on using <code>merge</code>.</p>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;dt1&#39;), y=1:4)
+DT2 &lt;- data.table(x=c(&#39;a&#39;, &#39;b&#39;, &#39;dt2&#39;), z=5:7)
+setkey(DT1, x)
+setkey(DT2, x)
+merge(DT1, DT2)
+</code></pre>
+
+<h1>Overview of joins</h1>
+
+<p>Here is a quick summary of SQL joins, applicable to <code>data.table</code> too.</p>
+
+<p><small>(Source: <a href="http://www.codeproject.com">http://www.codeproject.com</a>)</small></p>
+
+<p><img src="http://www.codeproject.com/KB/database/Visual_SQL_Joins/Visual_SQL_JOINS_orig.jpg" alt="SQL joins"/></p>
+
+<h1>A left join</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;dt1&#39;), y=1:4)
+DT2 &lt;- data.table(x=c(&#39;a&#39;, &#39;b&#39;, &#39;dt2&#39;), z=5:7)
+setkey(DT1, x)
+setkey(DT2, x)
+merge(DT1, DT2, all.x=TRUE)
+</code></pre>
+
+<h1>A right join</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;dt1&#39;), y=1:4)
+DT2 &lt;- data.table(x=c(&#39;a&#39;, &#39;b&#39;, &#39;dt2&#39;), z=5:7)
+setkey(DT1, x)
+setkey(DT2, x)
+merge(DT1, DT2, all.y=TRUE)
+</code></pre>
+
+<h1>An outer join</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;dt1&#39;), y=1:4)
+DT2 &lt;- data.table(x=c(&#39;a&#39;, &#39;b&#39;, &#39;dt2&#39;), z=5:7)
+setkey(DT1, x)
+setkey(DT2, x)
+merge(DT1, DT2, all=TRUE) ## outer join
+</code></pre>
+
+<h1>An inner join</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(x=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;dt1&#39;), y=1:4)
+DT2 &lt;- data.table(x=c(&#39;a&#39;, &#39;b&#39;, &#39;dt2&#39;), z=5:7)
+setkey(DT1, x)
+setkey(DT2, x)
+merge(DT1, DT2, all=FALSE) ## inner join
+</code></pre>
+
+<hr/>
+
+<h1>Speed example</h1>
+
+<pre><code class="r, cache=TRUE">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(
+  x=do.call(paste, expand.grid(letters, letters, letters, letters)), 
+  y=rnorm(26^4)
+)
+DT2 &lt;- DT1[ sample(1:nrow(DT1), 1E5), ]
+setnames(DT2, c(&#39;x&#39;, &#39;z&#39;))
+DF1 &lt;- as.data.frame(DT1)
+DF2 &lt;- as.data.frame(DT2)
+setkey(DT1, x); setkey(DT2, x)
+microbenchmark( DT=merge(DT1, DT2), DF=merge.data.frame(DF1, DF2), replications=5)
+</code></pre>
+
+<h1>Subset joins</h1>
+
+<p>We can also perform joins of two keyed <code>data.table</code>s using the <code>[</code> operator.
+We perform right joins, so that e.g.</p>
+
+<ul>
+<li><code>DT1[DT2]</code></li>
+</ul>
+
+<p>is a right join of <code>DT1</code> into <code>DT2</code>. These joins are typically a bit faster. Do
+note that the order of columns post-merge can be different, though.</p>
+
+<h1>Subset joins</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(
+  x=do.call(paste, expand.grid(letters, letters, letters, letters)), 
+  y=rnorm(26^4)
+)
+DT2 &lt;- DT1[ sample(1:nrow(DT1), 1E5), ]
+setnames(DT2, c(&#39;x&#39;, &#39;z&#39;))
+setkey(DT1, x); setkey(DT2, x)
+tmp1 &lt;- DT2[DT1]
+setcolorder(tmp1, c(&#39;x&#39;, &#39;y&#39;, &#39;z&#39;))
+tmp2 &lt;- merge(DT1, DT2, all.x=TRUE)
+setcolorder(tmp2, c(&#39;x&#39;, &#39;y&#39;, &#39;z&#39;))
+identical(tmp1, tmp2)
+</code></pre>
+
+<h1>Subset joins can be faster</h1>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT1 &lt;- data.table(
+  x=do.call(paste, expand.grid(letters, letters, letters, letters)), 
+  y=rnorm(26^4)
+)
+DT2 &lt;- DT1[ sample(1:nrow(DT1), 1E5), ]
+setnames(DT2, c(&#39;x&#39;, &#39;z&#39;))
+setkey(DT1, x); setkey(DT2, x)
+microbenchmark( bracket=DT1[DT2], merge=merge(DT1, DT2, all.y=TRUE), times=5 )
+</code></pre>
+
+<h1>Subset joins and the j-expression</h1>
+
+<p>More importantly they can be used the j-expression simultaneously, which can be very convenient. </p>
+
+<pre><code class="r">DT1 &lt;- data.table(x=1:5, y=6:10, z=11:15, key=&quot;x&quot;)
+DT2 &lt;- data.table(x=2L, y=7, w=1L, key=&quot;x&quot;)
+# 1) subset only essential/necessary cols
+DT1[DT2, list(z)]
+# 2) create new col
+# i.y refer&#39;s to DT2&#39;s y col
+DT1[DT2, list(newcol = y &gt; i.y)]  
+# 3) also assign by reference with `:=`
+DT1[DT2, newcol := z-w]
+</code></pre>
+
+<h1>data.table and SQL</h1>
+
+<p>We can understand the usage of <code>[</code> as SQL statements. 
+From <a href="http://datatable.r-forge.r-project.org/datatable-faq.pdf">FAQ 2.16</a>:</p>
+
+<table><thead>
+<tr>
+<th>data.table Argument</th>
+<th>SQL Statement</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>i</td>
+<td>WHERE</td>
+</tr>
+<tr>
+<td>j</td>
+<td>SELECT</td>
+</tr>
+<tr>
+<td>:=</td>
+<td>UPDATE</td>
+</tr>
+<tr>
+<td>by</td>
+<td>GROUP BY</td>
+</tr>
+<tr>
+<td>i</td>
+<td>ORDER BY (in compound syntax)</td>
+</tr>
+<tr>
+<td>i</td>
+<td>HAVING (in compound syntax)</td>
+</tr>
+</tbody></table>
+
+<p>Compound syntax refers to multiple subsetting calls, and generally isn&#39;t
+necessary until you really feel like a <code>data.table</code> expert:</p>
+
+<pre><code>DT[where,select|update,group by][having][order by][ ]...[ ]
+</code></pre>
+
+<h1>data.table and SQL - Joins</h1>
+
+<p>Here is a quick summary table of joins in <code>data.table</code>.</p>
+
+<table><thead>
+<tr>
+<th>SQL</th>
+<th>data.table</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>LEFT JOIN</td>
+<td>x[y]</td>
+</tr>
+<tr>
+<td>RIGHT JOIN</td>
+<td>y[x]</td>
+</tr>
+<tr>
+<td>INNER JOIN</td>
+<td>x[y, nomatch=0]</td>
+</tr>
+<tr>
+<td>OUTER JOIN</td>
+<td>merge(x,y,all=TRUE)</td>
+</tr>
+</tbody></table>
+
+<h1>data.table and SQL</h1>
+
+<p>It&#39;s worth noting that I really mean it when I say that <code>data.table</code> is like
+an in-memory data base. It will even perform some basic query optimization!</p>
+
+<pre><code class="r">library(data.table)
+options(datatable.verbose=TRUE)
+DT &lt;- data.table(x=1:5, y=1:5, z=1:5, a=c(&#39;a&#39;, &#39;a&#39;, &#39;b&#39;, &#39;b&#39;, &#39;c&#39;))
+DT[, lapply(.SD, mean), by=a]
+options(datatable.verbose=FALSE)
+</code></pre>
+
+<h1>Some thoughts</h1>
+
+<p>The primary use of <code>data.table</code> is for efficient and <strong>elegant</strong> data manipulation including aggregation and joins. </p>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+DT &lt;- data.table(gp1=sample(letters, 1E6, TRUE), gp2=sample(LETTERS, 1E6, TRUE), y=rnorm(1E6))
+microbenchmark( times=5,
+  DT=DT[, mean(y), by=list(gp1, gp2)],
+  DF=with(DT, tapply(y, paste(gp1, gp2), mean)))
+</code></pre>
+
+<p>Unlike &ldquo;split-apply-combine&rdquo; approaches such as <code>plyr</code>, data is never split in <code>data.table</code>! <code>data.table</code> applies the function to each subset recursively (in C for speed). This keeps the memory footprint low - which is very essential for &ldquo;big data&rdquo;. </p>
+
+<h1>Other interesting convenience functions</h1>
+
+<ul>
+<li><code>like</code></li>
+</ul>
+
+<pre><code class="r like">DT = data.table(Name=c(&quot;Mary&quot;,&quot;George&quot;,&quot;Martha&quot;), Salary=c(2,3,4))
+# Use regular expressions
+DT[Name %like% &quot;^Mar&quot;]
+</code></pre>
+
+<ul>
+<li><code>set*</code> functions
+<code>set</code>, <code>setattr</code>, <code>setnames</code>, <code>setcolorder</code>, <code>setkey</code>, <code>setkeyv</code></li>
+</ul>
+
+<pre><code class="r set">setcolorder(DT, c(&quot;Salary&quot;, &quot;Name&quot;))
+DT
+</code></pre>
+
+<ul>
+<li><code>DT[, (myvar):=NULL]</code> remove a column</li>
+</ul>
+
+<pre><code class="r NULL">DT[,Name:=NULL]
+</code></pre>
+
+<h1>Bonuses: fread</h1>
+
+<p><code>data.table</code> also comes with <code>fread</code>, a file reader much, much better than
+<code>read.table</code> or <code>read.csv</code>:</p>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+big_df &lt;- data.frame(x=rnorm(1E6), y=rnorm(1E6))
+file &lt;- tempfile()
+write.table(big_df, file=file, row.names=FALSE, col.names=TRUE, sep=&quot;\t&quot;, quote=FALSE)
+microbenchmark( fread=fread(file), r.t=read.table(file, header=TRUE, sep=&quot;\t&quot;), times=1 )
+unlink(file)
+</code></pre>
+
+<h1>Bonuses: rbindlist</h1>
+
+<p>Use this function to <code>rbind</code> a list of <code>data.frame</code>s, <code>data.table</code>s or <code>list</code>s:</p>
+
+<pre><code class="r">library(data.table); library(microbenchmark)
+dfs &lt;- replicate(100, data.frame(x=rnorm(1E4), y=rnorm(1E4)), simplify=FALSE)
+all.equal( rbindlist(dfs), data.table(do.call(rbind, dfs)) )
+microbenchmark( DT=rbindlist(dfs), DF=do.call(rbind, dfs), times=5 )
+</code></pre>
+
+<h1>Summary</h1>
+
+<p>To quote Matt Dowle</p>
+
+<p><code>data.table</code> builds on base R functionality to reduce 2 types of time :</p>
+
+<ol>
+<li><p>programming time (easier to write, read, debug and maintain)</p></li>
+<li><p>compute time</p></li>
+</ol>
+
+<p>It has always been that way around, 1 before 2.  The <em>main</em> benefit is the syntax: combining  where, select|update and &#39;by&#39; into one query without having to string along a sequence of isolated function calls.  <strong>Reduced function calls.  Reduced variable name repetition.  Easier to understand.</strong></p>
+
+<h1>Learning More</h1>
+
+<ul>
+<li><p>Read some of the <code>[data.table]</code> tagged questions on 
+<a href="http://stackoverflow.com/questions/tagged/data.table">StackOverflow</a></p></li>
+<li><p>Read through the <a href="http://datatable.r-forge.r-project.org/datatable-faq.pdf">data.table FAQ</a>,
+which is surprisingly well-written and comprehensive.</p></li>
+<li><p>Experiment!</p></li>
+</ul>
+
+<h1>Databases and the Structured Query Language (SQL) </h1>
+
+<ul>
+<li>A database is an organized collection of datasets (tables).</li>
+<li>A database management system (DBMS) is a software system designed to allow the definition, creation, querying, update, and administration of databases.</li>
+<li>Well-known DBMSs include MySQL, PostgreSQL, SQLite, Microsoft SQL Server, Oracle, etc.</li>
+<li>Relational DBMSs (RDBMs) store data in a set of related tables</li>
+<li>Most RDBMs use some form of the Structured Query Language (SQL)</li>
+</ul>
+
+<p><strong>Why do we even need databases?</strong></p>
+
+<h1>The Structured Query Language (SQL) </h1>
+
+<p>Although SQL is an ANSI (American National Standards Institute) standard, there are different flavors of the SQL language.</p>
+
+<p>The data in RDBMS is stored in database objects called tables.</p>
+
+<p>A table is a collection of related data entries and it consists of columns and rows.</p>
+
+<p>Here we will use SQLite, which is a self contained relational database management system. In contrast to other database management systems, SQLite is not a separate process that is accessed from the client application (e.g. MySQL, PostgreSQL).</p>
+
+<h1>Using RSQLite</h1>
+
+<p>Here we will make use of the <a href="http://www.bioconductor.org">Bioconductor</a> project to load and use an SQLite database.</p>
+
+<pre><code class="r eval=FALSE"># You only need to run this once
+source(&quot;http://bioconductor.org/biocLite.R&quot;)
+biocLite(c(&quot;org.Hs.eg.db&quot;))
+</code></pre>
+
+<pre><code class="r load-Hs-library, cache=FALSE"># Now we can use the org.Hs.eg.db to load a database
+library(org.Hs.eg.db)
+# Create a connection
+Hs_con &lt;- org.Hs.eg_dbconn()
+# List tables
+head(dbListTables(Hs_con))
+# Or using an SQLite command (NOTE: This is specific to SQLite)
+head(dbGetQuery(Hs_con, &quot;SELECT name FROM sqlite_master WHERE type=&#39;table&#39; ORDER BY name;&quot;))
+</code></pre>
+
+<h1>Using RSQLite (suite)</h1>
+
+<pre><code class="r fields, cache=FALSE"># What columns are available?
+dbListFields(Hs_con, &quot;gene_info&quot;)
+dbListFields(Hs_con, &quot;alias&quot;)
+# Or using SQLite
+# dbGetQuery(Hs_con, &quot;PRAGMA table_info(&#39;gene_info&#39;);&quot;)
+</code></pre>
+
+<pre><code class="r select-all, cache=FALSE">gc()
+alias &lt;- dbGetQuery(Hs_con, &quot;SELECT * FROM alias;&quot;)
+gc()
+gene_info &lt;- dbGetQuery(Hs_con, &quot;SELECT * FROM gene_info;&quot;)
+chromosomes &lt;- dbGetQuery(Hs_con, &quot;SELECT * FROM chromosomes;&quot;)
+</code></pre>
+
+<hr/>
+
+<pre><code class="r join, cache=FALSE">CD154_df &lt;- dbGetQuery(Hs_con, &quot;SELECT * FROM alias a JOIN gene_info g ON g._id = a._id WHERE a.alias_symbol LIKE &#39;CD154&#39;;&quot;)
+gc()
+CD40LG_alias_df &lt;- dbGetQuery(Hs_con, &quot;SELECT * FROM alias a JOIN gene_info g ON g._id = a._id WHERE g.symbol LIKE &#39;CD40LG&#39;;&quot;)
+gc()
+</code></pre>
+
+<h1>Some SQL Commands</h1>
+
+<h3>SELECT</h3>
+
+<p>The SELECT is used to query the database and retrieve selected data that match the specific criteria that you specify:</p>
+
+<p>SELECT column1 [, column2, &hellip;] 
+FROM tablename 
+WHERE condition </p>
+
+<h3>ORDER BY</h3>
+
+<p>ORDER BY clause can order column name in either ascending (ASC) or descending (DESC) order.</p>
+
+<h3>JOIN</h3>
+
+<p>There are times when we need to collate data from two or more tables. 
+As with data.tables we can use LEFT/RIGHT/INNER JOINS</p>
+
+<h3>GROUP BY</h3>
+
+<p>The GROUP BY was added to SQL so that aggregate functions could return a result grouped by column values. </p>
+
+<p>SELECT col_name, function (col_name) FROM table_name GROUP BY col_name </p>
+
+<h1>A &ldquo;GROUP BY&rdquo; example</h1>
+
+<pre><code class="r join-chromosome, cache=FALSE">dbGetQuery(Hs_con, &quot;SELECT c.chromosome, COUNT(g.gene_name) AS count FROM chromosomes c JOIN gene_info g ON g._id = c._id WHERE c.chromosome IN (1,2,3,4,&#39;X&#39;) GROUP BY c.chromosome ORDER BY count;&quot;)
+</code></pre>
+
+<h1>Some more SQL commands</h1>
+
+<p>Some other SQL statements that might be of used to you:</p>
+
+<h3>CREATE TABLE</h3>
+
+<p>The CREATE TABLE statement is used to create a new table. </p>
+
+<h3>DELETE</h3>
+
+<p>The DELETE command can be used to remove a record(s) from a table. </p>
+
+<h3>DROP</h3>
+
+<p>To remove an entire table from the database use the DROP command.</p>
+
+<h3>CREATE VIEW</h3>
+
+<p>A view is a virtual table that is a result of SQL SELECT statement. A view contains fields from one or more real tables in the database. This virtual table can then be queried as if it were a real table. </p>
+
+<h1>Creating your own SQLite database in R</h1>
+
+<pre><code class="r sqlite-ex, cache=FALSE">db &lt;- dbConnect(SQLite(), dbname=&quot;./Data/SDY61/SDY61.sqlite&quot;)
+dbWriteTable(conn = db, name = &quot;hai&quot;, value = &quot;./Data/SDY61/hai_result.txt&quot;, row.names = FALSE, header = TRUE, sep=&quot;\t&quot;)
+dbWriteTable(conn = db, name = &quot;cohort&quot;, value = &quot;./Data/SDY61/arm_or_cohort.txt&quot;, row.names = FALSE, header = TRUE, sep=&quot;\t&quot;)
+</code></pre>
+
+<h1>Creating your own SQLite database in R (suite)</h1>
+
+<pre><code class="r some-queries, cache=FALSE">dbListFields(db, &quot;hai&quot;)
+dbListFields(db, &quot;cohort&quot;)
+
+res &lt;- dbGetQuery(db, &quot;SELECT STUDY_TIME_COLLECTED, cohort.DESCRIPTION, MAX(VALUE_REPORTED) AS max_value FROM hai JOIN cohort ON hai.ARM_ACCESSION = cohort.ARM_ACCESSION WHERE cohort.DESCRIPTION LIKE &#39;%TIV%&#39; GROUP BY BIOSAMPLE_ACCESSION;&quot;)
+
+head(res)
+</code></pre>
+
+<h1>Using data.table to perform the same operations</h1>
+
+<pre><code class="r a-la-dt"># Read the tables using fread
+hai &lt;- fread(&quot;./Data/SDY61/hai_result.txt&quot;)
+cohort &lt;- fread(&quot;./Data/SDY61/arm_or_cohort.txt&quot;)
+
+## Set keys before joining
+setkey(hai, &quot;ARM_ACCESSION&quot;)
+setkey(cohort, &quot;ARM_ACCESSION&quot;)
+
+## Inner join
+dt_joined &lt;- cohort[hai, nomatch=0]
+
+## Summarize values
+head(dt_joined[DESCRIPTION %like% &quot;TIV&quot;, list(max_value=max(VALUE_REPORTED)), by=&quot;BIOSAMPLE_ACCESSION,STUDY_TIME_COLLECTED&quot;])
+</code></pre>
+
+<h1>The sqldf package</h1>
+
+<p>Sometimes it can be convenient to use SQL statements on dataframes. This is exactly what the sqldf package does.</p>
+
+<pre><code class="r sqldf, eval=FALSE">library(sqldf)
+data(iris)
+sqldf(&quot;select * from iris limit 5&quot;)
+sqldf(&quot;select count(*) from iris&quot;)
+sqldf(&quot;select Species, count(*) from iris group by Species&quot;)
+</code></pre>
+
+<p>The <code>sqldf</code> package can even provide increased speed over pure R operations. </p>
+
+<h1>Summary</h1>
+
+<ul>
+<li><p>R base <code>data.frame</code>s are convenient but often not adapted to large dataset manipulation (e.g. genomics). </p></li>
+<li><p>Thankfully, there are good alternatives. My recommendtion is:</p>
+
+<ul>
+<li>Use <code>data.table</code> for your day-to-day operations</li>
+<li>When you have many tables and a complex schema, use <code>sqlite</code>.</li>
+</ul></li>
+</ul>
+
+<p><strong>Note:</strong> There many other R packages for &ldquo;big data&rdquo; such the <code>bigmemory</code> suite, <code>biglm</code>, <code>ff</code>, <code>RNetcdf</code>, <code>rhdf5</code>, etc. </p>
+
+</body>
+
+</html>
+
